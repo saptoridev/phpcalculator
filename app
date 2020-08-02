@@ -28,5 +28,8 @@ try {
     $app->addCommands($commands);
 
     $app->run(new ArgvInput(), new ConsoleOutput());
-} catch (Throwable $e) {
+} catch(RuntimeException $e){   
+    printf("%s\n",$e->getMessage());
+}catch (Throwable $e) {
+    print_r($e);
 }
