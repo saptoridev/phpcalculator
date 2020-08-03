@@ -8,9 +8,10 @@
         "php": ">=7.3.4",
         "illuminate/console": "5.8.*",
         "illuminate/container": "5.8.*",
+        "illuminate/database": "5.8.*",
         "illuminate/events": "5.8.*",
         "illuminate/support": "5.8.*",
-        "illuminate/database" : "5.8.*"
+        "vlucas/phpdotenv": "^5.1"
     },
     "autoload": {
         "psr-4": {

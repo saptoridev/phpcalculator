@@ -11,17 +11,20 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 try {
     require_once __DIR__.'/vendor/autoload.php';
+
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
     $appConfig = require_once __DIR__.'/config/app.php';
 
-    $dbconf = $appConfig['connections']['postgresql'];
     $capsule = new Capsule;
     $capsule->addConnection([
-     'driver' => $dbconf['driver'],
-     'host' => $dbconf['host'],
-     'port' => $dbconf['port'],
-     'database' => $dbconf['database'],
-     'username' => $dbconf['username'],
-     'password' => $dbconf['password'],
+     'driver' => $_ENV["DB_DRIVER"],
+     'host' => $_ENV["DB_HOST"],
+     'port' => $_ENV['DB_PORT'],
+     'database' => $_ENV['DB_DATABASE'],
+     'username' => $_ENV['DB_USERNAME'],
+     'password' => $_ENV['DB_PASSWORD'],
      'charset' => 'utf8',
      'collation' => 'utf8_unicode_ci',
      'prefix' => '',
