@@ -3,6 +3,8 @@
 namespace Jakmall\Recruitment\Calculator\Commands;
 
 use Illuminate\Console\Command;
+use Jakmall\Recruitment\Calculator\History\Infrastructure\CommandHistoryManagerInterface;
+
 
 class AddCommand extends Command
 {
@@ -16,8 +18,12 @@ class AddCommand extends Command
      */
     protected $description;
 
-    public function __construct()
+    protected $logmanager;
+
+    public function __construct(CommandHistoryManagerInterface $logmanager)
     {
+        $this->logmanager = $logmanager ;
+
         $commandVerb = $this->getCommandVerb();
 
         $this->signature = sprintf(
@@ -43,10 +49,25 @@ class AddCommand extends Command
     public function handle(): void
     {
         $numbers = $this->getInput();
+        if(is_array($numbers)){
+            foreach($numbers as $key=>$val){
+                if(!is_numeric($val)){
+                    $this->error(sprintf("Non-numeric value : %s",$val));
+                    return;
+                }
+            }
+        }
+        
         $description = $this->generateCalculationDescription($numbers);
         $result = $this->calculateAll($numbers);
 
         $this->comment(sprintf('%s = %s', $description, $result));
+
+        $this->logmanager->log([
+            "command" => $this->getCommandVerb(),
+            "description"=>$description,
+            "result" => $result
+        ]);
     }
 
     protected function getInput(): array

@@ -3,6 +3,7 @@
 namespace Jakmall\Recruitment\Calculator\Commands;
 
 use Illuminate\Console\Command;
+use Jakmall\Recruitment\Calculator\History\Infrastructure\CommandHistoryManagerInterface;
 
 class PowCommand extends Command
 {
@@ -16,8 +17,12 @@ class PowCommand extends Command
      */
     protected $description;
 
-    public function __construct()
+    protected $logmanager;
+
+    public function __construct(CommandHistoryManagerInterface $logmanager)
     {
+        $this->logmanager = $logmanager ;
+
         $commandVerb = $this->getCommandVerb();
 
         $this->signature = sprintf(
@@ -42,6 +47,12 @@ class PowCommand extends Command
         $result = $this->calculate($base,$exp);
 
         $this->comment(sprintf('%s = %s', $description, $result));
+
+        $this->logmanager->log([
+            "command" => $this->getCommandVerb(),
+            "description"=>$description,
+            "result" => $result
+        ]);
     }
 
     protected function getBaseInput()
