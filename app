@@ -7,14 +7,33 @@ use Illuminate\Events\Dispatcher;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 try {
     require_once __DIR__.'/vendor/autoload.php';
+    $appConfig = require_once __DIR__.'/config/app.php';
+
+    $dbconf = $appConfig['connections']['postgresql'];
+    $capsule = new Capsule;
+    $capsule->addConnection([
+     'driver' => $dbconf['driver'],
+     'host' => $dbconf['host'],
+     'port' => $dbconf['port'],
+     'database' => $dbconf['database'],
+     'username' => $dbconf['username'],
+     'password' => $dbconf['password'],
+     'charset' => 'utf8',
+     'collation' => 'utf8_unicode_ci',
+     'prefix' => '',
+    ]);
+    // Setup the Eloquent ORM
+    $capsule->bootEloquent();
 
     $container = new Container();
     $dispatcher = new Dispatcher();
-    $app = new Application($container, $dispatcher, '0.5');
+    $app = new Application($container, $dispatcher, '0.6');
     $app->setName('Calculator');
-    $appConfig = require_once __DIR__.'/config/app.php';
+   
     $providers = $appConfig['providers'];
 
     foreach ($providers as $provider) {

@@ -9,7 +9,8 @@
         "illuminate/console": "5.8.*",
         "illuminate/container": "5.8.*",
         "illuminate/events": "5.8.*",
-        "illuminate/support": "5.8.*"
+        "illuminate/support": "5.8.*",
+        "illuminate/database" : "5.8.*"
     },
     "autoload": {
         "psr-4": {
