@@ -10,7 +10,14 @@ interface CommandHistoryManagerInterface
      *
      * @return array
      */
-    public function findAll(): array;
+    public function findAll($drivername): array;
+
+     /**
+     * Returns array of command history.
+     *
+     * @return array
+     */
+    public function findByCommand($drivername,$command): array;
 
     /**
      * Log command data to storage.
